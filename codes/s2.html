@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Genrelly</title>
+    <link rel="stylesheet" href="genrelly1.css">
+</head>
+<body>
+    <center>
+        <header>
+            <h1>Genrelly</h1>
+            <p>Search the right book for the right mood!</p>
+        </header>
+        <br>
+        <div class="filter">
+            <label for="genre">Filter by Genre:</label>
+            <select id="search-input">
+                <option value="search-alias=aps">Search book genre</option>
+                <option value="search-alias=action-and-adventure">Action and adventure</option>
+                <option value="search-alias=romance">Romance</option>
+                <option value="search-alias=fairytale">Fairytale</option>
+                <option value="search-alias=fantasy">Fantasy</option>
+                <option value="search-alias=comics">Comics</option>
+                <option value="search-alias=science-fiction">Science fiction</option>
+                <option value="search-alias=horror">Horror</option>
+                <option value="search-alias=thriller">Crime Thriller</option>
+                <option value="search-alias=mystery">Mystery</option>
+            </select>
+            <br><br>
+            <button id="search-btn">Search</button>
+            <div id="books-container"></div>
+        </div>
+        <footer>
+            <div class="contact-us">
+                <h2>Contact Us</h2>
+                <p>Email: contact@genrelly.com</p>
+                <p>Phone: 123-456-7890</p>
+                <p>Address: BNMIT, Bengaluru, India</p>
+            </div>
+        </footer>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script>
+            const searchInput = document.querySelector('#search-input');
+            const searchBtn = document.querySelector('#search-btn');
+            const booksContainer = document.querySelector('#books-container');
+
+            searchBtn.addEventListener('click', () => {
+                const searchTerm = searchInput.value;
+                const url = `https://www.googleapis.com/books/v1/volumes?q=${searchTerm}`;
+
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        booksContainer.innerHTML = '';
+
+                        data.items.forEach(item => {
+                            const book = document.createElement('div');
+                            book.classList.add('book');
+
+                            const title = document.createElement('h2');
+                            title.textContent = item.volumeInfo.title;
+
+                            const author = document.createElement('p');
+                            author.textContent = `Author: ${item.volumeInfo.authors}`;
+
+                            const description = document.createElement('p');
+                            description.textContent = item.volumeInfo.description;
+
+                            const thumbnail = document.createElement('img');
+                            thumbnail.src = item.volumeInfo.imageLinks.thumbnail;
+
+                            book.appendChild(title);
+                            book.appendChild(author);
+                            book.appendChild(description);
+                            book.appendChild(thumbnail);
+
+                            booksContainer.appendChild(book);
+                        });
+                    })
+                    .catch(error => console.log(error));
+            });
+
+        </script>
+    </center>
+</body>
+</html>
